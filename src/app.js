@@ -1,7 +1,7 @@
 
 const express = require('express');
 const app = express();
-const port = 3001;
+const port = 3004;
 
 // json formatında gelen body'leri parse etmek için
 app.use(express.json());
