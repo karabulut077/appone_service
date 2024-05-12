@@ -4,7 +4,7 @@ require('dotenv').config();
 
 const express = require('express');
 const app = express();
-const port = process.env.PORT || 3001;
+const port = process.env.PORT;
 
 // json formatında gelen body'leri parse etmek için
 app.use(express.json());
@@ -20,5 +20,5 @@ app.get('/api/data', (req, res) => {
 });
 
 app.listen(port, () => {
-    console.log(`API http://localhost:${port} serving ...`);
+    console.log(`server started on port ${ port } ...`);
 });
