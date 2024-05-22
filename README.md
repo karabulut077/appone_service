@@ -1,2 +1,2 @@
 # appone_service
-backend service of appone web app
+express.js backend service of appone web app
