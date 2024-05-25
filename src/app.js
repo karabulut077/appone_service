@@ -10,16 +10,25 @@ const port = process.env.PORT;
 
 app.use(express.json());
 
-/*let data = [
-    { id: 1, name: "Name 1" },
-    { id: 2, name: "Name 2" },
-];*/
-
-
 app.get('/products', (req, res) => {
+    // TODO: log requests
     console.log("/products hit");
-    let products = getAllProducts();
-    res.status(200).json(products);
+
+    getAllProducts()
+        .then(data => {
+            res.status(200).json({
+                error_status: false,
+                error_message: "",
+                data: Array.isArray(data)? data: [data]
+            });
+        })
+        .catch(err => {
+            res.status(500).json({
+                error_status: true,
+                error_message: err,
+                data: []
+            });
+        });
 });
 
 /*app.get('/api/data/:id', basicAuth, (req, res) => {
@@ -44,5 +53,5 @@ app.get('/products', (req, res) => {
 });*/
 
 app.listen(port, () => {
-    console.log(`server started on port ${ port } ...`);
+    console.log(`server started on port ${port} ...`);
 });

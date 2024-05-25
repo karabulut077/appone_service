@@ -5,20 +5,23 @@ const { MongoClient } = require("mongodb");
 const uri = process.env.MONGODB_ATLAS_CONNECTION_STRING;
 const client = new MongoClient(uri);
 
-exports.getAllProducts = async function() {
+exports.getAllProducts = async function () {
     try {
-        const database = client.db('appone');
-        const products_collection = database.collection('products');
+        await client.connect();
+
+        const database = client.db("appone");
+        const products_collection = database.collection("products");
 
         const query = {};
-        const find_cursor = products_collection.find(query);
-        const products = await find_cursor.toArray();
+        const products = await products_collection.find(query).toArray();
 
-        console.log(products);
-        return products;
+        return Promise.resolve(products);
     }
     catch (error) {
-        console.error('error while running getAllProducts():', error);
+        // TODO: log errors
+        // return common error message for all type of errors
+        console.log(error);
+        return Promise.reject(error);
     }
     finally {
         await client.close();
