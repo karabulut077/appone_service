@@ -16,17 +16,15 @@ app.get('/products', (req, res) => {
 
     getAllProducts()
         .then(data => {
+            console.log(data);
             res.status(200).json({
-                error_status: false,
-                error_message: "",
                 data: Array.isArray(data)? data: [data]
+                //data: []
             });
         })
         .catch(err => {
             res.status(500).json({
-                error_status: true,
-                error_message: err,
-                data: []
+                errmsg: "db error"
             });
         });
 });

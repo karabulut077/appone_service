@@ -4,11 +4,15 @@ const { MongoClient } = require("mongodb");
 
 const uri = process.env.MONGODB_ATLAS_CONNECTION_STRING;
 const client = new MongoClient(uri);
+let isConnected = false;
 
 exports.getAllProducts = async function () {
-    try {
+    if(!isConnected){
         await client.connect();
+        isConnected = true;
+    }
 
+    try {
         const database = client.db("appone");
         const products_collection = database.collection("products");
 
@@ -24,6 +28,6 @@ exports.getAllProducts = async function () {
         return Promise.reject(error);
     }
     finally {
-        await client.close();
+        // await client.close();
     }
 }
