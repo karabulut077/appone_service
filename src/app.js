@@ -2,27 +2,49 @@
 // load environment variables from .env file
 require('dotenv').config();
 
-const getAllProducts = require('./database.js').getAllProducts;
 const express = require('express');
-
 const app = express();
 const port = process.env.PORT;
+const getAllProducts = require('./database.js').getAllProducts;
+const getProductById = require('./database.js').getProductById;
 
 app.use(express.json());
+
+app.get('/product', (req, res) => {
+    const productId = req.query.id;
+    // TODO: log requests
+    console.log("/product hit, requested product id:", productId);
+
+    getProductById(productId)
+        .then(data => {
+            console.log(data);
+            res.status(200).json({
+                data: data
+                //data: null
+            });
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({
+                errmsg: "db error"
+            });
+        });
+});
 
 app.get('/products', (req, res) => {
     // TODO: log requests
     console.log("/products hit");
-
+    // hiç veri gelmezse testini brands tablosunda yap
     getAllProducts()
         .then(data => {
             console.log(data);
             res.status(200).json({
-                data: Array.isArray(data)? data: [data]
+                data: data
                 //data: []
             });
         })
         .catch(err => {
+            console.log(err);
             res.status(500).json({
                 errmsg: "db error"
             });
