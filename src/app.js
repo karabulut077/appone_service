@@ -3,6 +3,7 @@
 require('dotenv').config();
 
 const express = require('express');
+const { getCommentsByProductId } = require('./database.js');
 const app = express();
 const port = process.env.PORT;
 const getAllProducts = require('./database.js').getAllProducts;
@@ -17,10 +18,8 @@ app.get('/product', (req, res) => {
 
     getProductById(productId)
         .then(data => {
-            console.log(data);
             res.status(200).json({
                 data: data
-                //data: null
             });
         })
         .catch(err => {
@@ -37,10 +36,27 @@ app.get('/products', (req, res) => {
     // hiç veri gelmezse testini brands tablosunda yap
     getAllProducts()
         .then(data => {
-            console.log(data);
             res.status(200).json({
                 data: data
-                //data: []
+            });
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({
+                errmsg: "db error"
+            });
+        });
+});
+
+app.get('/comments', (req, res) => {
+    const productId = req.query.id;
+    // TODO: log requests
+    console.log("/comments hit, requested product id:", productId);
+
+    getCommentsByProductId(productId)
+        .then(data => {
+            res.status(200).json({
+                data: data
             });
         })
         .catch(err => {
