@@ -158,6 +158,7 @@ exports.getDetailsByProductId = async function (productId) {
             product_name: product.name,
             brand_id: product.brand_id,
             brand_name: product.brand_name,
+            images: product.images,
             store_id: store._id,
             store_name: store.name,
             stock_id: stock._id,
