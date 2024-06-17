@@ -8,27 +8,9 @@ const app = express();
 const port = process.env.PORT;
 const getAllProducts = require('./database.js').getAllProducts;
 const getProductById = require('./database.js').getProductById;
+const getDetailsByProductId = require('./database.js').getDetailsByProductId;
 
 app.use(express.json());
-
-app.get('/product', (req, res) => {
-    const productId = req.query.id;
-    // TODO: log requests
-    console.log("/product hit, requested product id:", productId);
-
-    getProductById(productId)
-        .then(data => {
-            res.status(200).json({
-                data: data
-            });
-        })
-        .catch(err => {
-            console.log(err);
-            res.status(500).json({
-                errmsg: "db error"
-            });
-        });
-});
 
 app.get('/products', (req, res) => {
     // TODO: log requests
@@ -54,6 +36,44 @@ app.get('/comments', (req, res) => {
     console.log("/comments hit, requested product id:", productId);
 
     getCommentsByProductId(productId)
+        .then(data => {
+            res.status(200).json({
+                data: data
+            });
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({
+                errmsg: "db error"
+            });
+        });
+});
+
+app.get('/details', (req, res) => {
+    const productId = req.query.product_id;
+    // TODO: log requests
+    console.log("/details hit, requested product id:", productId);
+
+    getDetailsByProductId(productId)
+        .then(data => {
+            res.status(200).json({
+                data: data
+            });
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({
+                errmsg: "db error"
+            });
+        });
+});
+
+app.get('/product', (req, res) => {
+    const productId = req.query.id;
+    // TODO: log requests
+    console.log("/product hit, requested product id:", productId);
+
+    getProductById(productId)
         .then(data => {
             res.status(200).json({
                 data: data
