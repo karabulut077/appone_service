@@ -9,11 +9,13 @@ const port = process.env.PORT;
 const getAllProducts = require('./database.js').getAllProducts;
 const getProductById = require('./database.js').getProductById;
 const getDetailsByProductId = require('./database.js').getDetailsByProductId;
+const getBestSellerProducts = require('./database.js').getBestSellerProducts;
 
 app.use(express.json());
 
+// TODO: log requests
+
 app.get('/products', (req, res) => {
-    // TODO: log requests
     console.log("/products hit");
     // hiç veri gelmezse testini brands tablosunda yap
     getAllProducts()
@@ -30,9 +32,26 @@ app.get('/products', (req, res) => {
         });
 });
 
+app.get('/bestseller', (req, res) => {
+    const count = req.query.count;
+    console.log("/bestseller hit, requested count is", count);
+    
+    getBestSellerProducts(count)
+        .then(data => {
+            res.status(200).json({
+                data: data
+            });
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({
+                errmsg: "db error"
+            });
+        });
+});
+
 app.get('/comments', (req, res) => {
     const productId = req.query.id;
-    // TODO: log requests
     console.log("/comments hit, requested product id:", productId);
 
     getCommentsByProductId(productId)
@@ -51,7 +70,6 @@ app.get('/comments', (req, res) => {
 
 app.get('/details', (req, res) => {
     const productId = req.query.product_id;
-    // TODO: log requests
     console.log("/details hit, requested product id:", productId);
 
     getDetailsByProductId(productId)
@@ -70,7 +88,6 @@ app.get('/details', (req, res) => {
 
 app.get('/product', (req, res) => {
     const productId = req.query.id;
-    // TODO: log requests
     console.log("/product hit, requested product id:", productId);
 
     getProductById(productId)
